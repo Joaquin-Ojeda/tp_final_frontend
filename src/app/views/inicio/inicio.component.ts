@@ -3,6 +3,7 @@ import { Tarea } from 'src/app/models/tarea';
 import { ApiTareasService } from 'src/app/services/api-tareas.service';
 import { AuthenticateService } from 'src/app/services/cognito.service';
 import { Router } from "@angular/router";
+import { ApiGatewayService } from 'src/app/services/api.gateway.service';
 
 
 @Component({
@@ -15,15 +16,21 @@ export class InicioComponent {
   tareasTotal: Tarea[]=[];
   cargando: Boolean = true;
   error: Boolean = false;
+  user: any;
   @ViewChild('errorModal') errorModal?: ElementRef;
   
-  constructor(private apiTareasService: ApiTareasService, private authService: AuthenticateService, private router: Router){}
+  constructor(private apiTareasService: ApiTareasService, private authService: AuthenticateService, private router: Router, private apiGatewayService: ApiGatewayService){}
 
   ngOnInit(){
     if(!this.authService.isAuthenticated()){
       this.router.navigate(["/login"]);
     }else{
       this.cargarTareas();
+      this.user = localStorage.getItem("user");
+      this.apiGatewayService.getUser(this.user).subscribe(
+        data => console.log('User data: ', data),
+        error => console.log('Error: ', error)
+      );
     }
   }
 
