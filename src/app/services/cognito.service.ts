@@ -36,6 +36,7 @@ export class AuthenticateService {
 
     this.cognitoUser.authenticateUser(authenticationDetails, {
       onSuccess: (result: any) => {
+        localStorage.setItem("user", emailaddress);
         this.router.navigate(["/inicio"]);
       },
       // First time login attempt
@@ -83,6 +84,7 @@ export class AuthenticateService {
     this.cognitoUser = this.userPool.getCurrentUser();
     if (this.cognitoUser) {
       this.cognitoUser.signOut();
+      localStorage.removeItem("user");
       this.router.navigate(["login"]);
     }
   }
