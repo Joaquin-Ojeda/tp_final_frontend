@@ -81,6 +81,19 @@ export class EliminarTareaComponent implements OnInit {
       }
     });
   }
+
+  deleteTask(taskId: string) {
+    this.apiGatewayService.deleteTask(taskId).subscribe(
+      response => {
+        console.log('Tarea eliminada:', response);
+        // Actualiza la lista de tareas si es necesario
+        this.loadTasks(); // Supongamos que esta función recarga las tareas
+      },
+      error => {
+        console.error('Error al eliminar tarea:', error);
+      }
+    );
+  }
  /**
   * @method buscarTarea
   * @param event 
@@ -103,7 +116,7 @@ export class EliminarTareaComponent implements OnInit {
       data => {
         var dataJson = JSON.parse(data.body);
         const tasks = dataJson.Items;
-
+        this.tareas = [];
         for(var task of tasks){
           var tareaAux: Tarea = {
             _id: task.taskId,

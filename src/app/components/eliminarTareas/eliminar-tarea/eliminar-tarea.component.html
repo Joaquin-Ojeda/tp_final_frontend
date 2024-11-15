@@ -3,7 +3,7 @@
 
   <div class="headerL">
     <h1>Eliminación de Tareas</h1> 
-    <button class="buttonActualizaTarea" (click)="cargarTareas()">Actualizar <img class="iconActualizaTarea" src="../../../../assets/iconos/iconActualizaTarea.png" alt="Actualizar Tarea"></button>
+    <button class="buttonActualizaTarea" (click)="loadTasks()">Actualizar <img class="iconActualizaTarea" src="../../../../assets/iconos/iconActualizaTarea.png" alt="Actualizar Tarea"></button>
   </div>
    
 
@@ -43,7 +43,7 @@
           <li [ngClass]="cambiarColorEstado(tarea.estado)"  class="list-group-item"><span class="spanLi spanLiEstado">{{tarea.estado}}</span></li>
       </div>
       <div class="bot">
-        <button class="buttonEliminarTarea" (click)="eliminarTarea(tarea._id)">
+        <button class="buttonEliminarTarea" (click)="deleteTask(tarea._id)">
           <img class="iconEliminarTarea" src="../../../../assets/iconos/iconEliminarTarea.png" alt="Eliminar Tarea">
         </button>
       </div> 

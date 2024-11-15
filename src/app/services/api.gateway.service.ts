@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -45,5 +45,21 @@ export class ApiGatewayService {
   getTask(id: string): Observable<any> {
     const params = new HttpParams().set('id', id);
     return this.http.get<any>(this.apiUrl+this.tasksUrl, { params });
+  }
+
+  // Crear tarea
+  postTask(task: any): Observable<any>{
+    const url = `${this.apiUrl}${this.tasksUrl}`;
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.post(url, JSON.stringify(task), { headers });
+  }
+
+  // Elimnar tarea
+  deleteTask(taskId: any): Observable<any>{
+    const params = new HttpParams().set('id', taskId);
+    return this.http.delete(`${this.apiUrl}${this.tasksUrl}`, { params });
   }
 }
