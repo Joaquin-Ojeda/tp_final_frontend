@@ -9,7 +9,7 @@ import { EditarComponent } from './components/editar/editar.component';
 
 const routes: Routes = [
   { path:'', redirectTo:'inicio', pathMatch:'full' },
-  { path:'inicio', component: InicioComponent },
+  { path:'inicio', component: InicioComponent},
   { path:'crear', component: CrearComponent },
   { path: 'editar/:id', component: EditarComponent },
   { path:'eliminar', component: EliminarTareaComponent}

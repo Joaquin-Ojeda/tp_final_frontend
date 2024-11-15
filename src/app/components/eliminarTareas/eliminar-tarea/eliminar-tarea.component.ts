@@ -39,6 +39,18 @@ export class EliminarTareaComponent implements OnInit {
     })
   }
 
+  cambiarColorEstado(estado: string){
+    switch(estado) {
+      case 'Finalizado':
+        return 'text-success';
+      case 'En proceso':
+        return 'text-warning';
+      case 'Cancelado':
+        return 'text-danger';
+      default:
+        return '';
+    }
+  }
 
 
  /**
@@ -59,15 +71,11 @@ export class EliminarTareaComponent implements OnInit {
       }
     });
   }
-  
-
-
-
  /**
   * @method buscarTarea
   * @param event 
   * Recibe un parámetro evento
-  * Si éste es una instancia de HTMLInputElement
+  * Si éste es una instancia de HTMLInputElement, ejecuta
   */
   buscarTarea(event: Event): void {
     if (event.target instanceof HTMLInputElement) {
