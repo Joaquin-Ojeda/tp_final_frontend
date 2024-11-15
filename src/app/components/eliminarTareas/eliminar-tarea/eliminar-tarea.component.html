@@ -3,7 +3,7 @@
 
   <div class="headerL">
     <h1>Eliminación de Tareas</h1> 
-    <button (click)="cargarTareas()">Actualizar</button>
+    <button class="buttonActualizaTarea" (click)="cargarTareas()">Actualizar <img class="iconActualizaTarea" src="../../../../assets/iconos/iconActualizaTarea.png" alt="Actualizar Tarea"></button>
   </div>
    
 
@@ -15,7 +15,7 @@
 </div>
    
 
-
+<!-- 
 <div class="container" >
     <div class="card" *ngFor="let tarea of tareas">
         <ul class="list-group list-group-flush" >
@@ -27,4 +27,26 @@
         </ul>
         <button class="button" (click)="eliminarTarea(tarea._id)">Eliminar</button>
     </div>
+</div> -->
+
+<div class="container">
+  <div class="card" *ngFor="let tarea of tareas" > 
+    
+      <div class="top">
+          <img src="../../../assets/imgTop1.jpg" alt="">
+      </div>
+      <div class="mid"> 
+          <li><span class="spanLi spanLiTareaID">Tarea ID: {{tarea._id}}</span></li>
+          <li><span class="spanLi spanLiAsig">{{tarea.asignado}}</span></li>
+          <li><span class="spanLi spanLiTitulo">{{tarea.titulo}} </span> </li>
+          <li><span class="spanLi spanLiDescrip">{{tarea.descripcion}}</span></li>
+          <li [ngClass]="cambiarColorEstado(tarea.estado)"  class="list-group-item"><span class="spanLi spanLiEstado">{{tarea.estado}}</span></li>
+      </div>
+      <div class="bot">
+        <button class="buttonEliminarTarea" (click)="eliminarTarea(tarea._id)">
+          <img class="iconEliminarTarea" src="../../../../assets/iconos/iconEliminarTarea.png" alt="Eliminar Tarea">
+        </button>
+      </div> 
+
+  </div>
 </div>

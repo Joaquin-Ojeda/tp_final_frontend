@@ -22,10 +22,12 @@
     "amazon-cognito-identity-js": "^6.3.12",
     "aws-sdk": "^2.1691.0",
     "bootstrap": "^5.3.3",
+    "html2canvas": "^1.4.1",
     "global": "^4.4.0",
     "i": "^0.3.7",
     "npm": "^10.8.1",
     "rxjs": "~7.8.0",
+    "swiper": "^11.1.14",
     "tslib": "^2.3.0",
     "zone.js": "~0.13.0"
   },
