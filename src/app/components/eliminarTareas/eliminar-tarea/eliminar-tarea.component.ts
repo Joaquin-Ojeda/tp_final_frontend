@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core'; //se suma OnInit
+import { Router } from '@angular/router';
 
 //clase Tarea de tarea.ts dentro de models
 import { Tarea } from 'src/app/models/tarea';
 
 //Conexion a la api local declarada en api-tareas.service.ts
 import { ApiTareasService } from 'src/app/services/api-tareas.service';
+import { AuthenticateService } from 'src/app/services/cognito.service';
 
 
 @Component({
@@ -16,10 +18,14 @@ export class EliminarTareaComponent implements OnInit {
   tareas: Tarea[] = []; // Variable para almacenar las tareas
   
   
-  constructor(private apiServiceTareas: ApiTareasService){}
+  constructor(private apiServiceTareas: ApiTareasService, private authService: AuthenticateService, private router: Router){}
 
   ngOnInit(): void {
-    this.cargarTareas();
+    if(!this.authService.isAuthenticated()){
+      this.router.navigate(["/login"]);
+    }else{
+      this.cargarTareas();
+    }
   }
 
   /**

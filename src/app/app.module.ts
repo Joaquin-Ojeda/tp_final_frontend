@@ -1,5 +1,6 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -15,6 +16,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { InicioComponent } from './views/inicio/inicio.component';
 import { CrearComponent } from './components/crear/crear.component';
 import { EditarComponent } from './components/editar/editar.component';
+import { LoginComponent } from './views/login/login.component';
+import { NewPasswordComponent } from './views/new-password/new-password.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -23,7 +26,9 @@ import { EditarComponent } from './components/editar/editar.component';
     CrearComponent,
     TareaCardComponent,
     TareaCardComponent,
-    InicioComponent
+    InicioComponent,
+    LoginComponent,
+    NewPasswordComponent
   ],
   imports: [
     BrowserModule,
@@ -32,7 +37,8 @@ import { EditarComponent } from './components/editar/editar.component';
     ReactiveFormsModule,
     HttpClientModule,
     HttpClientModule,
-    EditarComponent
+    EditarComponent,
+    FormsModule
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent],

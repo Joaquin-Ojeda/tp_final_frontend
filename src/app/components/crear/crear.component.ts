@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { NgClass } from '@angular/common';
 import { Tarea } from '../../../models/tarea';
 import { ApiTareasService } from '../../services/api-tareas.service';
+import { Router } from '@angular/router';
+import { AuthenticateService } from 'src/app/services/cognito.service';
 
 @Component({
   selector: 'app-crear',
@@ -22,7 +24,7 @@ usuarioActivo = {
   estado: 'En proceso'
 }
 
-constructor(private fb:FormBuilder, private apiTareasService: ApiTareasService){
+constructor(private fb:FormBuilder, private apiTareasService: ApiTareasService, private authService: AuthenticateService, private router: Router){
   this.formulario = this.fb.group({
     titulo: ['', Validators.required],
     descripcion: ['', Validators.required],
@@ -33,11 +35,14 @@ constructor(private fb:FormBuilder, private apiTareasService: ApiTareasService){
 }
 
 ngOnInit(): void {
-  this.formulario.patchValue({    
-    Estado: this.usuarioActivo.estado
-  })
-  this.formulario.get('estado')?.disable();
-
+  if(!this.authService.isAuthenticated()){
+    this.router.navigate(["/login"]);
+  }else{
+    this.formulario.patchValue({    
+      Estado: this.usuarioActivo.estado
+    })
+    this.formulario.get('estado')?.disable();
+  }
 
 }
 

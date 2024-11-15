@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class ApiTareasService {
 
-  private apiUrl = "http://localhost:3000";
+  private apiUrl = "http://taskflow-env.eba-wmmxe8zz.us-east-1.elasticbeanstalk.com";
 
   constructor(private http: HttpClient) { }
 

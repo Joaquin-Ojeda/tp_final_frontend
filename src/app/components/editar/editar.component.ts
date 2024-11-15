@@ -4,6 +4,7 @@ import { Tarea } from '../../../models/tarea';
 import { CommonModule } from '@angular/common';
 import { ApiTareasService } from '../../services/api-tareas.service';
 import { FormsModule } from '@angular/forms';
+import { AuthenticateService } from 'src/app/services/cognito.service';
 
 @Component({
   selector: 'app-editar',
@@ -28,30 +29,32 @@ export class EditarComponent {
   apiServicio = inject(ApiTareasService);
   ruta: ActivatedRoute = inject(ActivatedRoute)
 
-  constructor(private enrutador: Router) { }
+  constructor(private enrutador: Router, private authService: AuthenticateService) { }
 
   ngOnInit(): void {
-
-    this.ruta.params.subscribe({
-      next: params => {
-        const tareaID = params['id'];
-        if (tareaID) {
-          this.apiServicio.getTareaById(params['id']).subscribe({
-            next: (data: Tarea) => {
-              this.tarea = data;
-              console.log(this.tarea)
-            },
-            error: error => {
-              console.log(error)
-            }
-          });
+    if(!this.authService.isAuthenticated()){
+      this.enrutador.navigate(["/login"]);
+    }else{
+      this.ruta.params.subscribe({
+        next: params => {
+          const tareaID = params['id'];
+          if (tareaID) {
+            this.apiServicio.getTareaById(params['id']).subscribe({
+              next: (data: Tarea) => {
+                this.tarea = data;
+                console.log(this.tarea)
+              },
+              error: error => {
+                console.log(error)
+              }
+            });
+          }
+        },
+        error: error => {
+          console.log(error);
         }
-      },
-      error: error => {
-        console.log(error);
-      }
-    });
-
+      });
+    }
   }
 
 
