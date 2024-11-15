@@ -4,13 +4,16 @@ import { ApiTareasService } from 'src/app/services/api-tareas.service';
 import { AuthenticateService } from 'src/app/services/cognito.service';
 import { Router } from "@angular/router";
 import { ApiGatewayService } from 'src/app/services/api.gateway.service';
+import { DatePipe } from '@angular/common';
 
+import html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-inicio',
   templateUrl: './inicio.component.html',
   styleUrls: ['./inicio.component.css']
 })
+
 export class InicioComponent {
   tareas: Tarea[]=[];
   tareasTotal: Tarea[]=[];
@@ -20,7 +23,7 @@ export class InicioComponent {
   group: string = "TaskFlowTeamBack";
   @ViewChild('errorModal') errorModal?: ElementRef;
   
-  constructor(private apiTareasService: ApiTareasService, private authService: AuthenticateService, private router: Router, private apiGatewayService: ApiGatewayService){}
+  constructor(private apiTareasService: ApiTareasService, private datePipe: DatePipe, private authService: AuthenticateService, private router: Router, private apiGatewayService: ApiGatewayService){}
 
   ngOnInit(){
     if(!this.authService.isAuthenticated()){
@@ -28,16 +31,13 @@ export class InicioComponent {
     }else{
       //this.cargarTareas();
       this.user = localStorage.getItem("user");
-      this.apiGatewayService.getUser(this.user).subscribe(
-        data => console.log('User data: ', data),
-        error => console.log('Error: ', error)
-      );
       this.loadTasks();
     }
   }
 
   cargarTareas(){
-    this.apiTareasService.getTareas().subscribe({next:res=>{
+    this.apiTareasService.getTareas().subscribe({
+      next:res=>{
       this.tareas = res;
       this.tareasTotal = res;
       this.cargando = false;
@@ -48,6 +48,21 @@ export class InicioComponent {
       this.cargando = false;
     }});
   }
+  
+
+  obtenerTareasFinalizadas(): Tarea[] {
+    return this.tareas.filter(tarea => tarea.estado === 'Finalizado');
+  }
+
+  obtenerTareasEnProceso(): Tarea[] {
+    return this.tareas.filter(tarea => tarea.estado === 'En proceso');
+  }
+
+  obtenerTareasCanceladas(): Tarea[] {
+    return this.tareas.filter(tarea => tarea.estado === 'Cancelado');
+  }
+
+  
 
   loadTasks(){
     this.apiGatewayService.getTask(this.group).subscribe(
@@ -85,6 +100,52 @@ export class InicioComponent {
         this.tareas = this.tareasTotal;
       }
     }
+  }
+    
+  formatearFecha(fecha: Date):string{   
+    let fechaFormateada = this.datePipe.transform(fecha, "dd/MM/yy")
+    if(!fechaFormateada){
+      fechaFormateada = "";
+    }
+    return fechaFormateada;
+  }
+
+  capturarYCompartir(tareaId: string): void {
+    const tareaElement = document.getElementById(`tarea-${tareaId}`);
+    if (tareaElement) {
+      html2canvas(tareaElement).then(canvas => {
+        // Convertir el canvas en imagen
+        const imagenBase64 = canvas.toDataURL('image/png');
+
+        // Crear un enlace temporal para descargar la imagen
+        const enlaceDescarga = document.createElement('a');
+        enlaceDescarga.href = imagenBase64;
+        enlaceDescarga.download = `Tarea-${tareaId}.png`;
+        enlaceDescarga.click();
+      });
+    }
+  }
+
+  cambiarColorEstado(estado: string){
+    switch(estado) {
+      case 'Finalizado':
+        return 'text-success';
+      case 'En proceso':
+        return 'text-warning';
+      case 'Cancelado':
+        return 'text-danger';
+      default:
+        return '';
+    }
+  }
+
+
+  /* editarTarea() {
+    this.ruta.navigate(['/editar', this.tareas._id]);
+  } */
+  editarTarea(tarea: Tarea) {
+    console.log("Editar tarea:", tarea);
+    this.router.navigate(['/editar', tarea._id]);
   }
 
 }
