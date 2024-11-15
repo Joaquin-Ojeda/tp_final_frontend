@@ -31,10 +31,6 @@ export class InicioComponent {
     }else{
       //this.cargarTareas();
       this.user = localStorage.getItem("user");
-      this.apiGatewayService.getUser(this.user).subscribe(
-        data => console.log('User data: ', data),
-        error => console.log('Error: ', error)
-      );
       this.loadTasks();
     }
   }

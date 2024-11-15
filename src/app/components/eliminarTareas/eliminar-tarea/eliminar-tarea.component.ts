@@ -6,6 +6,7 @@ import { Tarea } from 'src/app/models/tarea';
 
 //Conexion a la api local declarada en api-tareas.service.ts
 import { ApiTareasService } from 'src/app/services/api-tareas.service';
+import { ApiGatewayService } from 'src/app/services/api.gateway.service';
 import { AuthenticateService } from 'src/app/services/cognito.service';
 
 
@@ -16,15 +17,18 @@ import { AuthenticateService } from 'src/app/services/cognito.service';
 })
 export class EliminarTareaComponent implements OnInit {
   tareas: Tarea[] = []; // Variable para almacenar las tareas
+  user: any;
+  group: string = "TaskFlowTeamBack";
   
-  
-  constructor(private apiServiceTareas: ApiTareasService, private authService: AuthenticateService, private router: Router){}
+  constructor(private apiServiceTareas: ApiTareasService, private authService: AuthenticateService, private router: Router, private apiGatewayService: ApiGatewayService){}
 
   ngOnInit(): void {
     if(!this.authService.isAuthenticated()){
       this.router.navigate(["/login"]);
     }else{
-      this.cargarTareas();
+      //this.cargarTareas();
+      this.user = localStorage.getItem("user");
+      this.loadTasks();
     }
   }
 
@@ -94,5 +98,28 @@ export class EliminarTareaComponent implements OnInit {
     }
   }
 
+  loadTasks(){
+    this.apiGatewayService.getTask(this.group).subscribe(
+      data => {
+        var dataJson = JSON.parse(data.body);
+        const tasks = dataJson.Items;
+
+        for(var task of tasks){
+          var tareaAux: Tarea = {
+            _id: task.taskId,
+            titulo: task.tittle,
+            descripcion: task.description,
+            asignado: task.assignedUserId,
+            fecha_fin: new Date(task.endAt),
+            estado: task.status
+          }
+          this.tareas.push(tareaAux);
+        }
+      },
+      error => {
+        console.log("Error al obtener tareas: " + error.message);
+      }
+    )
+  }
 
 }
